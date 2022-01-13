@@ -1,0 +1,185 @@
+CREATE TABLE clasa (
+    clasa VARCHAR2(3) NOT NULL
+);
+
+ALTER TABLE clasa
+    ADD CONSTRAINT clasa_clasa_ck CHECK ( ( substr(clasa, 1, length(clasa) - 1) BETWEEN 1 AND 12 )
+                                          AND ( substr(clasa, - 1, 1) BETWEEN 'A' AND 'E' ) );
+
+ALTER TABLE clasa ADD CONSTRAINT clasa_pk PRIMARY KEY ( clasa );
+
+CREATE TABLE elev (
+    codmatricol CHAR(4) NOT NULL,
+    nume        VARCHAR2(20) NOT NULL,
+    prenume     VARCHAR2(20) NOT NULL,
+    cnp         CHAR(13) NOT NULL,
+    email       VARCHAR2(25) NOT NULL,
+    clasa_clasa VARCHAR2(3) NOT NULL
+);
+
+ALTER TABLE elev
+    ADD CONSTRAINT elev_nume_ck CHECK ( length(nume) > 1 );
+
+ALTER TABLE elev
+    ADD CONSTRAINT elev_prenume_ck CHECK ( length(prenume) > 1 );
+
+ALTER TABLE elev
+    ADD CONSTRAINT elev_cnp_ck CHECK ( REGEXP_LIKE ( cnp,
+                                                     '^[1-9]\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])(0[1-9]|[1-4]\d|5[0-2]|99)(00[1-9]|0[1-9]\d|[1-9]\d\d)\d$' ) );
+
+ALTER TABLE elev
+    ADD CONSTRAINT elev_email_ck CHECK ( REGEXP_LIKE ( email,
+                                                       '[a-z0-9._%-]+@[a-z0-9._%-]+\.[a-z]{2,4}' ) );
+
+ALTER TABLE elev ADD CONSTRAINT elev_pk PRIMARY KEY ( codmatricol );
+
+ALTER TABLE elev ADD CONSTRAINT elev_cnp_un UNIQUE ( cnp );
+
+CREATE TABLE inregistrarenota (
+    id_inregistrarenota   NUMBER NOT NULL,
+    nota                  NUMBER NOT NULL,
+    data                  DATE NOT NULL,
+    pc_materie_id_materie NUMBER NOT NULL,
+    elev_codmatricol      CHAR(4) NOT NULL,
+    pc_id_profesor        NUMBER NOT NULL,
+    pc_clasa_clasa        VARCHAR2(3) NOT NULL
+);
+
+ALTER TABLE inregistrarenota
+    ADD CONSTRAINT inregistrarenota_nota CHECK ( nota IN ( 1, 2, 3, 4, 5,
+                                                           6, 7, 8, 9, 10 ) );
+
+ALTER TABLE inregistrarenota ADD CONSTRAINT inregistrarenota_pk PRIMARY KEY ( id_inregistrarenota );
+
+CREATE TABLE materie (
+    id_materie NUMBER NOT NULL,
+    denumire   VARCHAR2(30) NOT NULL
+);
+
+ALTER TABLE materie
+    ADD CONSTRAINT materie_denumire_ck CHECK ( length(denumire) > 1 );
+
+ALTER TABLE materie ADD CONSTRAINT materie_pk PRIMARY KEY ( id_materie );
+
+CREATE TABLE pc (
+    materie_id_materie   NUMBER NOT NULL,
+    profesor_id_profesor NUMBER NOT NULL,
+    clasa_clasa          VARCHAR2(3) NOT NULL
+);
+
+ALTER TABLE pc
+    ADD CONSTRAINT pc_pk PRIMARY KEY ( materie_id_materie,
+                                       profesor_id_profesor,
+                                       clasa_clasa );
+
+CREATE TABLE profesor (
+    id_profesor NUMBER NOT NULL,
+    nume        VARCHAR2(20) NOT NULL,
+    prenume     VARCHAR2(20) NOT NULL
+);
+
+ALTER TABLE profesor
+    ADD CONSTRAINT profesor_nume_ck CHECK ( length(nume) > 1 );
+
+ALTER TABLE profesor
+    ADD CONSTRAINT profesor_prenume_ck CHECK ( length(prenume) > 1 );
+
+ALTER TABLE profesor ADD CONSTRAINT profesor_pk PRIMARY KEY ( id_profesor );
+
+CREATE TABLE sala (
+    clasa_clasa VARCHAR2(3) NOT NULL,
+    etaj        NUMBER NOT NULL,
+    numar       NUMBER NOT NULL
+);
+
+ALTER TABLE sala
+    ADD CONSTRAINT sala_etaj_ck CHECK ( etaj IN ( 0, 1, 2 ) );
+
+ALTER TABLE sala
+    ADD CONSTRAINT sala_numar_ck CHECK ( numar BETWEEN 1 AND 10 );
+
+ALTER TABLE sala ADD CONSTRAINT sala_pk PRIMARY KEY ( clasa_clasa );
+
+ALTER TABLE Sala
+  add CONSTRAINT sala_unique UNIQUE (etaj, numar);
+
+ALTER TABLE elev
+    ADD CONSTRAINT elev_clasa_fk FOREIGN KEY ( clasa_clasa )
+        REFERENCES clasa ( clasa );
+
+ALTER TABLE inregistrarenota
+    ADD CONSTRAINT inregistrarenota_elev_fk FOREIGN KEY ( elev_codmatricol )
+        REFERENCES elev ( codmatricol );
+
+ALTER TABLE inregistrarenota
+    ADD CONSTRAINT inregistrarenota_pc_fk FOREIGN KEY ( pc_materie_id_materie,
+                                                        pc_id_profesor,
+                                                        pc_clasa_clasa )
+        REFERENCES pc ( materie_id_materie,
+                        profesor_id_profesor,
+                        clasa_clasa );
+
+ALTER TABLE pc
+    ADD CONSTRAINT pc_clasa_fk FOREIGN KEY ( clasa_clasa )
+        REFERENCES clasa ( clasa );
+
+ALTER TABLE pc
+    ADD CONSTRAINT pc_materie_fk FOREIGN KEY ( materie_id_materie )
+        REFERENCES materie ( id_materie );
+
+ALTER TABLE pc
+    ADD CONSTRAINT pc_profesor_fk FOREIGN KEY ( profesor_id_profesor )
+        REFERENCES profesor ( id_profesor );
+
+ALTER TABLE sala
+    ADD CONSTRAINT sala_clasa_fk FOREIGN KEY ( clasa_clasa )
+        REFERENCES clasa ( clasa );
+
+CREATE SEQUENCE inregistrarenota_id_inregistra START WITH 1 NOCACHE ORDER;
+
+CREATE OR REPLACE TRIGGER inregistrarenota_id_inregistra BEFORE
+    INSERT ON inregistrarenota
+    FOR EACH ROW
+    WHEN ( new.id_inregistrarenota IS NULL )
+BEGIN
+    :new.id_inregistrarenota := inregistrarenota_id_inregistra.nextval;
+END;
+/
+
+CREATE SEQUENCE materie_id_materie_seq START WITH 1 NOCACHE ORDER;
+
+CREATE OR REPLACE TRIGGER materie_id_materie_trg BEFORE
+    INSERT ON materie
+    FOR EACH ROW
+    WHEN ( new.id_materie IS NULL )
+BEGIN
+    :new.id_materie := materie_id_materie_seq.nextval;
+END;
+/
+
+CREATE SEQUENCE profesor_id_profesor_seq START WITH 1 NOCACHE ORDER;
+
+CREATE OR REPLACE TRIGGER profesor_id_profesor_trg BEFORE
+    INSERT ON profesor
+    FOR EACH ROW
+    WHEN ( new.id_profesor IS NULL )
+BEGIN
+    :new.id_profesor := profesor_id_profesor_seq.nextval;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_inregistrarenota_briu BEFORE
+    INSERT OR UPDATE ON inregistrarenota
+    FOR EACH ROW
+BEGIN
+    IF (
+        :new.data > sysdate
+        OR to_char(sysdate, 'YYYY') != to_char(:new.data, 'YYYY')
+    ) THEN
+        raise_application_error(-20001, 'Data invalida: '
+                                        || to_char(:new.data, 'DD.MM.YYYY HH24:MI:SS')
+                                        || ' trebuie sa fie de anul asta.');
+
+    END IF;
+END;
+/

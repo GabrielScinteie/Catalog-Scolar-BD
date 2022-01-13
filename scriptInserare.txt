@@ -1,0 +1,69 @@
+
+INSERT INTO Clasa VALUES('10A');
+INSERT INTO Clasa VALUES('11B');
+INSERT INTO Clasa VALUES('9E');
+INSERT INTO Clasa VALUES('9A');
+INSERT INTO Clasa VALUES('11C');
+INSERT INTO Clasa VALUES('10B');
+
+INSERT INTO Sala VALUES('10A',1,5);
+INSERT INTO Sala VALUES('11B',1,6);
+INSERT INTO Sala VALUES('9E',2,7);
+INSERT INTO Sala VALUES('9A',2,8);
+INSERT INTO Sala VALUES('11C',0,9);
+INSERT INTO Sala VALUES('10B',0,10);
+
+INSERT INTO ELEV VALUES(1001, 'Scinteie', 'Gabriel', '5001031226741', 'gabi.scinteie00@gmail.com','9E');
+INSERT INTO ELEV VALUES(1002, 'Paraschiv', 'Stefan', '5001031226841', 'stefparaschiv@gmail.com','9E');
+INSERT INTO ELEV VALUES(1003, 'Barbuta', 'Delia', '2001031226941', 'deliabarbuta@gmail.com','9E');
+INSERT INTO ELEV VALUES(1004, 'Prioteasa', 'Ioana', '2001031227041', 'prioteasaioana@gmail.com','9E');
+
+INSERT INTO ELEV VALUES(1005, 'Curpan', 'Robert', '5001031226742', 'curpanrobert@gmail.com','10A');
+INSERT INTO ELEV VALUES(1006, 'Apavaloaiei', 'Florin', '5001031226843', 'florinapav@gmail.com','10A');
+INSERT INTO ELEV VALUES(1007, 'Luca', 'Catalin', '5001031226944', 'lucacatalin@gmail.com','10A');
+INSERT INTO ELEV VALUES(1008, 'Grabosvschi', 'Adrian', '5001031227046', 'adigrabovschi@gmail.com','10A');
+INSERT INTO ELEV VALUES(1009, 'Stanislav', 'Iulian', '5001031227099', 'blabla@gmail.com','10A');
+
+INSERT INTO Materie(denumire) VALUES('Matematica');
+INSERT INTO Materie(denumire) VALUES('Romana');
+INSERT INTO Materie(denumire) VALUES('Engleza');
+INSERT INTO Materie(denumire) VALUES('Germana');
+INSERT INTO Materie(denumire) VALUES('Sport');
+INSERT INTO Materie(denumire) VALUES('Fizica');
+INSERT INTO Materie(denumire) VALUES('Informatica');
+
+INSERT INTO profesor(nume,prenume) VALUES('Luchian', 'Dorel');
+INSERT INTO profesor(nume,prenume) VALUES('Amarandei', 'Alexandru');
+INSERT INTO profesor(nume,prenume) VALUES('Lita', 'Lavinia');
+INSERT INTO profesor(nume,prenume) VALUES('Teodorescu', 'Vlad');
+INSERT INTO profesor(nume,prenume) VALUES('Sarghie', 'Cornelia');
+INSERT INTO profesor(nume,prenume) VALUES('Valeriu', 'Ionut');
+
+INSERT INTO PC VALUES(4, 3, '9E'); --GERMANA, LITA
+INSERT INTO PC VALUES(7, 4, '9E'); -- INFO, TEODORESCU
+INSERT INTO PC VALUES(1, 1, '9E'); -- MATE, LUCHIAN
+INSERT INTO PC VALUES(6, 2, '9E'); -- FIZICA, AMARANDEI
+INSERT INTO PC VALUES(2, 5, '9E'); -- ROMANA, SARGHIE
+
+INSERT INTO PC VALUES(4, 3, '10A'); --GERMANA, LITA
+INSERT INTO PC VALUES(7, 4, '10A'); -- INFO, TEODORESCU
+INSERT INTO PC VALUES(1, 1, '10A'); -- MATE, LUCHIAN
+INSERT INTO PC VALUES(6, 2, '10A'); -- FIZICA, AMARANDEI
+
+
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(9, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1001,3, '9E');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(10, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1002,3, '9E');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(8, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1003,3, '9E');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(10, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1004,3, '9E');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(10, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 1, 1004,1, '9E');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(8, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 1, 1004,1, '9E');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(10, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 6, 1004,2, '9E');
+
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(8, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1005,3, '10A');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(9, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1006,3, '10A');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(8, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1007,3, '10A');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(7, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 4, 1008,3, '10A');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(6, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 1, 1008,1, '10A');
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(5, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 6, 1008,2, '10A');
+
+INSERT INTO INREGISTRARENOTA(nota,data,PC_Materie_ID_Materie, Elev_CodMatricol,PC_ID_Profesor,PC_Clasa_Clasa)  VALUES(9, TO_DATE('13-12-2021','fmDD-MM-YYYY'), 1, 1008,1, '10A');
